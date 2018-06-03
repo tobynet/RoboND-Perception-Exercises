@@ -144,17 +144,17 @@ def pcl_callback(pcl_msg):
     cloud_objects = cloud_filtered.extract(inliers, negative=True)
     rospy.loginfo(' cloud_objects: %d' % (cloud_objects.size))
 
-    # TODO: Euclidean Clustering
+    # DONE: Euclidean Clustering
     cluster_indices, white_cloud = euclidean_clustering(cloud_objects,
         tolerance=0.02, cluster_range=(100,15000))
     rospy.loginfo(' cluster_indices: %d, white_cloud: %d ' % (len(cluster_indices), white_cloud.size))
 
-    # TODO: Create Cluster-Mask Point Cloud to visualize each cluster separately
+    # DONE: Create Cluster-Mask Point Cloud to visualize each cluster separately
     # cluster 毎に色を分けつつ、 XYZ -> XYZRGB に変換。
     cluster_cloud = create_colored_cluster_cloud(cluster_indices, white_cloud)
     rospy.loginfo(' colored cluster: %d' % (cluster_cloud.size))
 
-    # TODO: Convert PCL data to ROS messages
+    # DONE: Convert PCL data to ROS messages
     ros_cloud_objects = pcl_to_ros(cloud_objects)
     ros_cloud_table = pcl_to_ros(cloud_table)
     ros_cluster_cloud = pcl_to_ros(cluster_cloud)
