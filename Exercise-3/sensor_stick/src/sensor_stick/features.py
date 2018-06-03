@@ -2,6 +2,7 @@ import matplotlib.colors
 import matplotlib.pyplot as plt
 import numpy as np
 from pcl_helper import *
+import sensor_msgs.point_cloud2 as pc2
 
 def compute_normalized_histograms(channels, nbins=8, bins_range=(0,256)):
     """
