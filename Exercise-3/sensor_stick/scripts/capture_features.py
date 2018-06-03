@@ -31,19 +31,28 @@ if __name__ == '__main__':
        'hammer',
        'plastic_cup',
        'soda_can']
+    
+    # defaut: max_sample_num = 5
+    max_sample_num = 100
 
     # Disable gravity and delete the ground plane
     initial_setup()
     labeled_features = []
 
+    rospy.loginfo('Begin to capture...')
     for model_name in models:
+        rospy.loginfo('  Spawn model: %s' % model_name)
         spawn_model(model_name)
 
-        for i in range(5):
+
+        for i in range(max_sample_num):
+            rospy.loginfo('    Sampling... %d/%d' % (i+1, max_sample_num))
+
             # make five attempts to get a valid a point cloud then give up
             sample_was_good = False
             try_count = 0
             while not sample_was_good and try_count < 5:
+                rospy.loginfo('      try count: %d' % try_count)
                 sample_cloud = capture_sample()
                 sample_cloud_arr = ros_to_pcl(sample_cloud).to_array()
 
@@ -55,14 +64,21 @@ if __name__ == '__main__':
                     sample_was_good = True
 
             # Extract histogram features
-            chists = compute_color_histograms(sample_cloud, using_hsv=False)
+            rospy.loginfo('    Extract histogram features')
+            chists = compute_color_histograms(sample_cloud, using_hsv=True)
             normals = get_normals(sample_cloud)
             nhists = compute_normal_histograms(normals)
             feature = np.concatenate((chists, nhists))
             labeled_features.append([feature, model_name])
 
+            rospy.loginfo('    Sampling DONE')
+
         delete_model()
 
 
+    rospy.loginfo(' dump labeled features')
     pickle.dump(labeled_features, open('training_set.sav', 'wb'))
+
+
+    rospy.loginfo('DONE')
 
