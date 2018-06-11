@@ -15,8 +15,8 @@ vox = cloud.make_voxel_grid_filter()
 # ボクセルのグリッドサイズを設定
 # 大きいほど Point Cloud の点を減らせる
 # 1 -> increment..
-#LEAF_SIZE = 0.01  # voxel size (also known as `leaf`)
-LEAF_SIZE = 0.001 #(debbugin)  # voxel size (also known as `leaf`)
+LEAF_SIZE = 0.1  # voxel size (also known as `leaf`)
+#LEAF_SIZE = 0.001 #(debbugin)  # voxel size (also known as `leaf`)
 vox.set_leaf_size(LEAF_SIZE, LEAF_SIZE, LEAF_SIZE)
 
 # To obtain the downsampled point clouds 
